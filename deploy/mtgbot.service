@@ -1,0 +1,21 @@
+# Template. deploy/install.sh fills in __APP_DIR__ and __APP_USER__ and
+# copies it to /etc/systemd/system/mtgbot.service.
+[Unit]
+Description=MTG Collections Discord bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__APP_USER__
+WorkingDirectory=__APP_DIR__
+ExecStart=__APP_DIR__/.venv/bin/python -m mtgbot.bot
+Restart=always
+RestartSec=10
+# Small hardening; the bot only needs to write inside its own folder.
+NoNewPrivileges=true
+ProtectSystem=full
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
