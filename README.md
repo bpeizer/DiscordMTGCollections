@@ -49,8 +49,9 @@ while testing, set `DEV_GUILD_ID` in `.env` to your server's id (Discord setting
 Advanced → Developer Mode, then right-click the server → Copy Server ID).
 
 The bot keeps everything in `collections.db` next to it. Back that file up if you care
-about it. The bot only runs while this command is running, so for 24/7 use run it on an
-always-on machine (a Raspberry Pi, a small VPS, or a free-tier cloud VM).
+about it. The bot only runs while this command is running. To keep it online 24/7 for
+free, follow **[docs/oracle-cloud.md](docs/oracle-cloud.md)**, which sets it up on an Oracle
+Cloud Always Free server with automatic restarts and daily backups.
 
 ### Tests
 ```bash
