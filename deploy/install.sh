@@ -41,7 +41,9 @@ echo "==> Scheduling a daily backup at 04:15 (server time)"
 chmod +x "$APP_DIR/deploy/"*.sh
 CRON_LINE="15 4 * * * $APP_DIR/deploy/backup.sh >> $APP_DIR/backups/backup.log 2>&1"
 mkdir -p "$APP_DIR/backups"
-( crontab -l 2>/dev/null | grep -v 'deploy/backup.sh' ; echo "$CRON_LINE" ) | crontab -
+# '|| true': on a fresh server there is no crontab yet, and grep -v finds nothing;
+# without it, set -e/pipefail would stop the script here.
+{ crontab -l 2>/dev/null | grep -v 'deploy/backup.sh' || true; echo "$CRON_LINE"; } | crontab -
 
 if grep -q '^DISCORD_TOKEN=paste-your-bot-token-here' "$APP_DIR/.env"; then
   echo
