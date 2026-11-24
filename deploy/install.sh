@@ -14,6 +14,12 @@ echo "==> Installing system packages"
 sudo apt-get update -y
 sudo apt-get install -y python3 python3-venv python3-pip git sqlite3
 
+if ! python3 -c 'import sys; sys.exit(sys.version_info < (3, 10))'; then
+  echo "This server has $(python3 --version), but the bot needs Python 3.10 or newer."
+  echo "Use an Ubuntu 24.04 image (see docs/oracle-cloud.md, step 2)."
+  exit 1
+fi
+
 echo "==> Creating Python environment in $APP_DIR/.venv"
 python3 -m venv "$APP_DIR/.venv"
 "$APP_DIR/.venv/bin/pip" install --upgrade pip

@@ -24,7 +24,8 @@ so you **don't** need to open any firewall ports.
 2. **Name:** `mtgbot`.
 3. **Image and shape** → **Edit**:
    - **Image:** click **Change image** → **Ubuntu** → pick **Canonical Ubuntu 24.04**
-     (not the "Minimal" one).
+     (not the "Minimal" one, and not 20.04 or 22.04; the list shows several versions).
+     Before clicking **Create**, check the Image line on the main form says 24.04.
    - **Shape:** click **Change shape**. Either works, and both show an *Always Free-eligible* tag:
      - **Ampere** → `VM.Standard.A1.Flex`, 1 OCPU and 6 GB memory. Faster, but often
        says "Out of capacity". If so, try again later or use the next option.
@@ -162,8 +163,15 @@ sudo systemctl start mtgbot
 
 - **"Out of capacity" when creating an Ampere server:** use `VM.Standard.E2.1.Micro`
   instead, or try Ampere again at a different time of day.
+- **`Permission denied (publickey,gssapi-keyex,gssapi-with-mic)`:** the server is probably
+  running Oracle Linux (its user is `opc`), meaning the Ubuntu image wasn't selected.
+  Terminate it and create it again with Ubuntu 24.04.
 - **`Permission denied (publickey)` when connecting:** check the IP, that the user is
   `ubuntu`, and that you ran the `icacls` command on the key file.
+- **No public IP shown:** instance → **Networking** → the VNIC → **IP administration** →
+  ⋮ on the private IP → **Edit** → **Ephemeral public IP** → **Update**.
+- **Welcome message says Ubuntu 20.04 or 22.04:** the wrong image version was picked. The
+  install script stops with a Python version error. Recreate the server with 24.04.
 - **`git clone` says permission denied:** the deploy key wasn't added on GitHub, or the
   `~/.ssh/config` line from step 4 is missing. Test with `ssh -T git@github.com`.
 - **Status shows `failed` or keeps restarting:** run `journalctl -u mtgbot -n 50 --no-pager`.
